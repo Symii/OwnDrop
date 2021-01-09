@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -25,7 +26,8 @@ public class DropGUI {
         int counter = 0;
 
         HashMap<ItemStack, Double> drop_items = Main.getInstance().getDropManager().getDrop_items();
-        for(ItemStack item : drop_items.keySet())
+        ArrayList<ItemStack> sorted_items = Main.getInstance().getDropManager().getSorted_items();
+        for(ItemStack item : sorted_items)
         {
             double chance = drop_items.get(item);
             String strChance = String.format("%.2f", chance);

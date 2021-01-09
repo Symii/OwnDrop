@@ -38,7 +38,7 @@ public class BlockListeners implements Listener {
             final DropSettings dropSettings = plugin.getPlayerDataManager().getDropSettings(player);
             final ConfigManager configManager = plugin.getConfigManager();
             final DropManager dropManager = plugin.getDropManager();
-            List<ItemStack> drops = dropManager.getDrops(player);
+            ItemStack drop = dropManager.getDropItem();
 
             if(dropSettings.isCobblestone_drop() == false)
             {
@@ -52,32 +52,25 @@ public class BlockListeners implements Listener {
                 orb.setExperience(configManager.getExp_drop_amount());
             }
 
-            if(drops.size() >= 1)
+            if(drop != null)
             {
-                boolean item_dropped = false;
-                for(ItemStack item : drops)
+                if(dropSettings.isDropDisabled(drop))
                 {
-                    if(dropSettings.isDropDisabled(item))
-                    {
-                        continue;
-                    }
-                    if(dropSettings.isMessages())
-                    {
-                        player.sendMessage(configManager.getDrop_message()
-                                .replace("%item%", item.getItemMeta().getDisplayName())
-                                .replace("%amount%", String.valueOf(item.getAmount())));
-                    }
-
-                    ItemStack drop_item = new ItemStack(item.getType(), item.getAmount());
-                    DropToInvUtil.dropItem(player, drop_item, block_location);
-                    item_dropped = true;
+                    return;
+                }
+                if(dropSettings.isMessages())
+                {
+                    player.sendMessage(configManager.getDrop_message()
+                            .replace("%item%", drop.getItemMeta().getDisplayName())
+                            .replace("%amount%", String.valueOf(drop.getAmount())));
                 }
 
-                if(dropSettings.isSounds() && item_dropped)
+                ItemStack drop_item = new ItemStack(drop.getType(), drop.getAmount());
+                DropToInvUtil.dropItem(player, drop_item, block_location);
+                if(dropSettings.isSounds())
                 {
                     player.playSound(player.getLocation(), configManager.getDrop_sound(), 1.0f, 1.0f);
                 }
-
             }
         }
     }

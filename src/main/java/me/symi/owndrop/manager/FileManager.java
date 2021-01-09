@@ -32,7 +32,11 @@ public class FileManager {
         }
 
         drop_config = new YamlConfiguration();
+        reloadConfig();
+    }
 
+    public void reloadConfig()
+    {
         try
         {
             drop_config.load(drop_file);
@@ -41,7 +45,6 @@ public class FileManager {
         {
             e.printStackTrace();
         }
-
     }
 
     public File getDrop_file(String language)

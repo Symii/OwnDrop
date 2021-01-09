@@ -5,18 +5,18 @@ import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.RandomUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class DropManager {
 
     private final Main plugin;
     private HashMap<ItemStack, Double> drop_items = new HashMap<>();
+    private ArrayList<ItemStack> sorted_items = new ArrayList<>();
 
     public DropManager(Main plugin)
     {
@@ -24,8 +24,10 @@ public class DropManager {
         loadDropItems();
     }
 
-    private void loadDropItems()
+    public void loadDropItems()
     {
+        drop_items.clear();
+        sorted_items.clear();
         FileConfiguration config = plugin.getFileManager().getDrop_config();
         for(String s : config.getConfigurationSection("drop").getKeys(false))
         {
@@ -35,31 +37,33 @@ public class DropManager {
             itemMeta.setDisplayName(ChatUtil.fixColors(config.getString("drop." + s + ".name")));
             item.setItemMeta(itemMeta);
             drop_items.put(item, chance);
+            sorted_items.add(item);
         }
     }
 
-    public List<ItemStack> getDrops(Player player)
+    public ItemStack getDropItem()
     {
-        List<ItemStack> drops = new ArrayList<>();
         double randomNum = RandomUtil.getRandomDouble(0, 100);
-        double global_chance = 0;
-        for(ItemStack item : drop_items.keySet())
+        for(ItemStack item : sorted_items)
         {
             double chance = drop_items.get(item);
             if(Main.getInstance().isTurbo_drop())
             {
                 chance = chance * 2;
             }
-            if(chance >= (randomNum + global_chance))
+            if(chance >= randomNum)
             {
-                drops.add(item);
-                global_chance += randomNum;
+                return item;
             }
         }
-        return drops;
+        return null;
     }
 
     public HashMap<ItemStack, Double> getDrop_items() {
         return drop_items;
+    }
+
+    public ArrayList<ItemStack> getSorted_items() {
+        return sorted_items;
     }
 }

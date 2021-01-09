@@ -1,31 +1,31 @@
 drop:
   1:
     material: DIAMOND
-    chance: 3.7
+    chance: 1.2
     amount: 1
     name: "&bDiament"
   2:
     material: GOLD_INGOT
-    chance: 2.31
+    chance: 1.43
     amount: 1
     name: "&eZloto"
   3:
     material: IRON_ORE
-    chance: 3.11
+    chance: 1.56
     amount: 1
     name: "&7Zelazo"
   4:
     material: OBSIDIAN
-    chance: 1.99
+    chance: 1.87
     amount: 1
     name: "&3Obsydian"
   5:
     material: ACACIA_WOOD
-    chance: 2.69
+    chance: 2.01
     amount: 1
     name: "&6Drewno akacjowe"
   6:
     material: COAL
-    chance: 10.5
+    chance: 2.15
     amount: 1
     name: "&8Wegiel"

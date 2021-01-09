@@ -17,3 +17,6 @@ permissions:
   owndrop.turbo.enable:
     description: Permission for turbo drop enable command
     default: op
+  owndrop.reload:
+    description: Permission for drop reload command
+    default: op
