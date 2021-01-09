@@ -4,3 +4,7 @@ exp-drop-amount: 1
 
 drop-sound: BLOCK_DISPENSER_DISPENSE
 drop-message: "&eDrop &8► &7wydropiłeś/aś &d%item% &fx&7%amount%"
+
+enabled-worlds:
+  - "world"
+  - "custom_world"

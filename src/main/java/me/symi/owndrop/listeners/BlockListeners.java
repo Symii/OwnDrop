@@ -12,12 +12,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
 
 public class BlockListeners implements Listener {
 
@@ -28,11 +26,25 @@ public class BlockListeners implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event)
     {
         if(event.getBlock().getType() == Material.STONE)
         {
+            final String world = event.getBlock().getWorld().getName();
+            boolean drop_enabled = false;
+            for(String world_name : Main.getInstance().getConfigManager().getEnabled_worlds())
+            {
+                if(world.equalsIgnoreCase(world_name))
+                {
+                    drop_enabled = true;
+                    break;
+                }
+            }
+
+            if(!drop_enabled)
+                return;
+
             final Location block_location = event.getBlock().getLocation();
             final Player player = event.getPlayer();
             final DropSettings dropSettings = plugin.getPlayerDataManager().getDropSettings(player);

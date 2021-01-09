@@ -5,6 +5,8 @@ import me.symi.owndrop.utils.ChatUtil;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class ConfigManager {
 
     private final Main plugin;
@@ -13,6 +15,7 @@ public class ConfigManager {
     private double exp_drop_chance;
     private int exp_drop_amount;
     private String drop_message;
+    private List<String> enabled_worlds;
 
     public ConfigManager(Main plugin)
     {
@@ -30,6 +33,7 @@ public class ConfigManager {
         exp_drop_chance = config.getDouble("exp-drop-chance");
         exp_drop_amount = config.getInt("exp-drop-amount");
         drop_message = ChatUtil.fixColors(config.getString("drop-message"));
+        enabled_worlds = config.getStringList("enabled-worlds");
     }
 
     public String getDrop_message() {
@@ -50,5 +54,9 @@ public class ConfigManager {
 
     public int getExp_drop_amount() {
         return exp_drop_amount;
+    }
+
+    public List<String> getEnabled_worlds() {
+        return enabled_worlds;
     }
 }
