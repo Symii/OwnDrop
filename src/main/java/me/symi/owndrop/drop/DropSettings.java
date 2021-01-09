@@ -1,11 +1,16 @@
 package me.symi.owndrop.drop;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DropSettings {
 
     private Player player;
     private boolean cobblestone_drop, exp_drop, sounds, messages;
+    private List<ItemStack> disabled_drop_items;
 
     public DropSettings(Player player, boolean cobblestone_drop, boolean exp_drop, boolean sounds, boolean messages)
     {
@@ -14,6 +19,41 @@ public class DropSettings {
         this.exp_drop = exp_drop;
         this.sounds = sounds;
         this.messages = messages;
+        this.disabled_drop_items = new ArrayList<>();
+    }
+
+    public List<ItemStack> getDisabled_drop_items() {
+        return disabled_drop_items;
+    }
+
+    public void removeDisabledDropItem(ItemStack item)
+    {
+        for(ItemStack i : disabled_drop_items)
+        {
+            if(i.getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemMeta().getDisplayName()))
+            {
+                disabled_drop_items.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void disableDropItem(ItemStack item)
+    {
+        if(disabled_drop_items.contains(item) == false)
+            disabled_drop_items.add(item);
+    }
+
+    public boolean isDropDisabled(ItemStack item)
+    {
+        for(ItemStack i : disabled_drop_items)
+        {
+            if(item.hasItemMeta() && item.getItemMeta().getDisplayName().equalsIgnoreCase(i.getItemMeta().getDisplayName()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setCobblestone_drop(boolean cobblestone_drop) {

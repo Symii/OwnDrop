@@ -9,3 +9,11 @@ commands:
   drop:
     aliases: [owndrop]
     description: Opens drop GUI menu
+  turbo:
+    aliases: [ownturbo]
+    description: Turbo drop enable command
+
+permissions:
+  owndrop.turbo.enable:
+    description: Permission for turbo drop enable command
+    default: op

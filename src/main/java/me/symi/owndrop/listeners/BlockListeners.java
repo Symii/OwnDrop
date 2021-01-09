@@ -4,8 +4,8 @@ import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
 import me.symi.owndrop.manager.ConfigManager;
 import me.symi.owndrop.manager.DropManager;
-import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.DropToInvUtil;
+import me.symi.owndrop.utils.RandomUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -15,6 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
 
 public class BlockListeners implements Listener {
 
@@ -35,34 +38,46 @@ public class BlockListeners implements Listener {
             final DropSettings dropSettings = plugin.getPlayerDataManager().getDropSettings(player);
             final ConfigManager configManager = plugin.getConfigManager();
             final DropManager dropManager = plugin.getDropManager();
-            ItemStack drop_item = dropManager.getDropItem(player);
+            List<ItemStack> drops = dropManager.getDrops(player);
 
             if(dropSettings.isCobblestone_drop() == false)
             {
                 event.setDropItems(false);
             }
 
-            if(drop_item != null)
+            double randomNum = RandomUtil.getRandomDouble(0, 100);
+            if(dropSettings.isExp_drop() && configManager.getExp_drop_chance() >= randomNum)
             {
-                if(dropSettings.isSounds())
+                ExperienceOrb orb = (ExperienceOrb) player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+                orb.setExperience(configManager.getExp_drop_amount());
+            }
+
+            if(drops.size() >= 1)
+            {
+                boolean item_dropped = false;
+                for(ItemStack item : drops)
+                {
+                    if(dropSettings.isDropDisabled(item))
+                    {
+                        continue;
+                    }
+                    if(dropSettings.isMessages())
+                    {
+                        player.sendMessage(configManager.getDrop_message()
+                                .replace("%item%", item.getItemMeta().getDisplayName())
+                                .replace("%amount%", String.valueOf(item.getAmount())));
+                    }
+
+                    ItemStack drop_item = new ItemStack(item.getType(), item.getAmount());
+                    DropToInvUtil.dropItem(player, drop_item, block_location);
+                    item_dropped = true;
+                }
+
+                if(dropSettings.isSounds() && item_dropped)
                 {
                     player.playSound(player.getLocation(), configManager.getDrop_sound(), 1.0f, 1.0f);
                 }
-                if(dropSettings.isMessages())
-                {
-                    player.sendMessage(configManager.getDrop_message()
-                            .replace("%item%", drop_item.getType().toString())
-                            .replace("%amount%", String.valueOf(drop_item.getAmount())));
-                }
-                if(dropSettings.isExp_drop())
-                {
-                    ExperienceOrb orb = (ExperienceOrb) block_location.getWorld().spawnEntity(block_location, EntityType.EXPERIENCE_ORB);
-                    orb.setCustomName(ChatUtil.fixColors("&aExp x " + configManager.getExp_drop_amount()));
-                    orb.setCustomNameVisible(true);
-                    orb.setExperience(configManager.getExp_drop_amount());
-                }
 
-                DropToInvUtil.dropItem(player, drop_item, block_location);
             }
         }
     }

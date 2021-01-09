@@ -1,6 +1,7 @@
 package me.symi.owndrop;
 
 import me.symi.owndrop.commands.DropCommand;
+import me.symi.owndrop.commands.TurboCommand;
 import me.symi.owndrop.listeners.BlockListeners;
 import me.symi.owndrop.listeners.InventoryListeners;
 import me.symi.owndrop.listeners.PlayerListeners;
@@ -19,6 +20,7 @@ public class Main extends JavaPlugin {
     private ConfigManager configManager;
     private FileManager fileManager;
     private DropManager dropManager;
+    private boolean turbo_drop;
 
     @Override
     public void onLoad()
@@ -30,6 +32,7 @@ public class Main extends JavaPlugin {
     public void onEnable()
     {
         getCommand("drop").setExecutor(new DropCommand());
+        getCommand("turbo").setExecutor(new TurboCommand());
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new InventoryListeners(), this);
         pluginManager.registerEvents(new BlockListeners(this), this);
@@ -58,7 +61,7 @@ public class Main extends JavaPlugin {
         return playerDataManager;
     }
 
-    public Main getInstance()
+    public static Main getInstance()
     {
         return INSTANCE;
     }
@@ -78,4 +81,11 @@ public class Main extends JavaPlugin {
         return dropManager;
     }
 
+    public boolean isTurbo_drop() {
+        return turbo_drop;
+    }
+
+    public void setTurbo_drop(boolean turbo_drop) {
+        this.turbo_drop = turbo_drop;
+    }
 }

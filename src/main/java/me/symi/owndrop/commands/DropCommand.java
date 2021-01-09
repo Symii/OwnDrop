@@ -1,5 +1,6 @@
 package me.symi.owndrop.commands;
 
+import me.symi.owndrop.gui.DropGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +17,7 @@ public class DropCommand implements CommandExecutor {
         }
 
         final Player player = (Player) sender;
-
+        player.openInventory(DropGUI.getMainInventory());
 
         return false;
     }
