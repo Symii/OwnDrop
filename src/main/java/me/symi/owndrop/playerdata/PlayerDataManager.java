@@ -15,6 +15,11 @@ public class PlayerDataManager {
         return player_data;
     }
 
+    public DropSettings getDropSettings(Player player)
+    {
+        return player_data.get(player.getUniqueId());
+    }
+
     public void addPlayer(Player player, DropSettings dropSettings)
     {
         player_data.put(player.getUniqueId(), dropSettings);
@@ -23,6 +28,11 @@ public class PlayerDataManager {
     public void removePlayer(Player player)
     {
         player_data.remove(player.getUniqueId());
+    }
+
+    public void onDisable()
+    {
+        player_data.clear();
     }
 
 }

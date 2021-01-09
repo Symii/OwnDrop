@@ -2,20 +2,20 @@ drop:
   1:
     material: DIAMOND
     chance: 3.7
-    turbo-chance: 5.0
+    amount: 1
   2:
     material: GOLD_INGOT
     chance: 2.31
-    turbo-chance: 4.0
+    amount: 1
   3:
     material: IRON_ORE
     chance: 3.11
-    turbo-chance: 4.5
+    amount: 1
   4:
     material: OBSIDIAN
     chance: 1.99
-    turbo-chance: 2.5
+    amount: 1
   5:
     material: ACACIA_WOOD
     chance: 2.69
-    turbo-chance: 3.2
+    amount: 1
