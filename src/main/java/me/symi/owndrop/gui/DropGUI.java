@@ -2,6 +2,7 @@ package me.symi.owndrop.gui;
 
 import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
+import me.symi.owndrop.owndrop.DropItem;
 import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.StatusUtil;
 import org.bukkit.Bukkit;
@@ -14,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class DropGUI {
 
@@ -25,15 +25,14 @@ public class DropGUI {
 
         int counter = 0;
 
-        HashMap<ItemStack, Double> drop_items = Main.getInstance().getDropManager().getDrop_items();
-        ArrayList<ItemStack> sorted_items = Main.getInstance().getDropManager().getSorted_items();
-        for(ItemStack item : sorted_items)
+        ArrayList<DropItem> sorted_items = Main.getInstance().getDropManager().getSorted_items();
+        for(DropItem dropItem : sorted_items)
         {
-            double chance = drop_items.get(item);
+            double chance = dropItem.getChance();
             String strChance = String.format("%.2f", chance);
-            ItemStack gui_item = new ItemStack(item.getType());
+            ItemStack gui_item = new ItemStack(dropItem.getMaterial());
             ItemMeta gui_item_meta = gui_item.getItemMeta();
-            gui_item_meta.setDisplayName(item.getItemMeta().getDisplayName());
+            gui_item_meta.setDisplayName(dropItem.getItemName());
 
             if(Main.getInstance().isTurbo_drop())
             {
@@ -41,9 +40,14 @@ public class DropGUI {
                 strChance = String.format("%.2f", chance);
             }
 
+            ItemStack item = dropItem.parseItem();
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(dropItem.getItemName());
+            item.setItemMeta(itemMeta);
+
             gui_item_meta.setLore(ChatUtil.fixColors(Arrays.asList(
                     "&7Szansa: &e" + strChance + "%",
-                    "&7Ilosc: &ex" + item.getAmount(),
+                    "&7Ilosc: &ex" + dropItem.getAmount(),
                     "&7Status: " + (dropSettings.isDropDisabled(item) ? StatusUtil.getCrossMark() : StatusUtil.getCheckMark())
             )));
             gui_item.setItemMeta(gui_item_meta);

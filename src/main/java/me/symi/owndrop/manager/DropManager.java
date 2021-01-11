@@ -1,22 +1,20 @@
 package me.symi.owndrop.manager;
 
 import me.symi.owndrop.Main;
+import me.symi.owndrop.owndrop.DropItem;
 import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.RandomUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class DropManager {
 
     private final Main plugin;
-    private HashMap<ItemStack, Double> drop_items = new HashMap<>();
-    private ArrayList<ItemStack> sorted_items = new ArrayList<>();
+    private ArrayList<DropItem> sorted_items = new ArrayList<>();
 
     public DropManager(Main plugin)
     {
@@ -26,44 +24,48 @@ public class DropManager {
 
     public void loadDropItems()
     {
-        drop_items.clear();
         sorted_items.clear();
         FileConfiguration config = plugin.getFileManager().getDrop_config();
         for(String s : config.getConfigurationSection("drop").getKeys(false))
         {
             double chance = config.getDouble("drop." + s + ".chance");
-            ItemStack item = new ItemStack(Material.valueOf(config.getString("drop." + s + ".material")), config.getInt("drop." + s + ".amount"));
-            ItemMeta itemMeta = item.getItemMeta();
-            itemMeta.setDisplayName(ChatUtil.fixColors(config.getString("drop." + s + ".name")));
-            item.setItemMeta(itemMeta);
-            drop_items.put(item, chance);
-            sorted_items.add(item);
+            boolean custom_name_enabled = config.getBoolean("drop." + s + ".custom-name-enabled");
+            Material material = Material.valueOf(config.getString("drop." + s + ".material").toUpperCase());
+            int amount = config.getInt("drop." + s + ".amount");
+            List<String> lore = new ArrayList<>();
+            String itemName = ChatUtil.fixColors(config.getString("drop." + s + ".name"));
+
+            if(custom_name_enabled)
+            {
+                lore = ChatUtil.fixColors(config.getStringList("drop." + s + ".lore"));
+            }
+
+            DropItem dropItem = new DropItem(lore, custom_name_enabled, chance, amount, material, itemName);
+            sorted_items.add(dropItem);
         }
     }
 
-    public ItemStack getDropItem()
+    public List<DropItem> getDropItem()
     {
-        double randomNum = RandomUtil.getRandomDouble(0, 100);
-        for(ItemStack item : sorted_items)
+        List<DropItem> drops = new ArrayList<>();
+        for(DropItem dropItem : sorted_items)
         {
-            double chance = drop_items.get(item);
+            double randomNum = RandomUtil.getRandomDouble(0, 100);
+            double chance = dropItem.getChance();
             if(Main.getInstance().isTurbo_drop())
             {
                 chance = chance * 2;
             }
-            if(chance >= randomNum)
+
+            if(randomNum <= chance)
             {
-                return item;
+                drops.add(dropItem);
             }
         }
-        return null;
+        return drops;
     }
 
-    public HashMap<ItemStack, Double> getDrop_items() {
-        return drop_items;
-    }
-
-    public ArrayList<ItemStack> getSorted_items() {
+    public ArrayList<DropItem> getSorted_items() {
         return sorted_items;
     }
 }
