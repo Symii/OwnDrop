@@ -2,9 +2,16 @@ metrics: true
 exp-drop-chance: 2.0
 exp-drop-amount: 1
 
+drop-settings-inventory-size: 36
+
 drop-sound: BLOCK_DISPENSER_DISPENSE
 drop-message: "&eDrop &8► &7wydropiłeś/aś &d%item% &fx&7%amount%"
 
 enabled-worlds:
   - "world"
   - "custom_world"
+
+# - "PERMISSION ; MULTIPILER"
+drop-multipiler:
+  - "owndrop.multipiler.vip;1.1"
+  - "owndrop.multipiler.svip;1.2"

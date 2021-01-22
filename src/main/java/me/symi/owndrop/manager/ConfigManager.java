@@ -5,6 +5,7 @@ import me.symi.owndrop.utils.ChatUtil;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ConfigManager {
@@ -16,6 +17,8 @@ public class ConfigManager {
     private int exp_drop_amount;
     private String drop_message;
     private List<String> enabled_worlds;
+    private HashMap<String, Double> multipilers = new HashMap<>();
+    private int drop_settings_inventory_size;
 
     public ConfigManager(Main plugin)
     {
@@ -34,6 +37,22 @@ public class ConfigManager {
         exp_drop_amount = config.getInt("exp-drop-amount");
         drop_message = ChatUtil.fixColors(config.getString("drop-message"));
         enabled_worlds = config.getStringList("enabled-worlds");
+        List<String> drop_multipiler = config.getStringList("drop-multipiler");
+        for(String s : drop_multipiler)
+        {
+            String[] array = s.split(";");
+            multipilers.put(array[0], Double.parseDouble(array[1]));
+        }
+        drop_settings_inventory_size = config.getInt("drop-settings-inventory-size");
+    }
+
+    public int getDrop_settings_inventory_size() {
+        return drop_settings_inventory_size;
+    }
+
+    public HashMap<String, Double> getMultipilers()
+    {
+        return multipilers;
     }
 
     public String getDrop_message() {

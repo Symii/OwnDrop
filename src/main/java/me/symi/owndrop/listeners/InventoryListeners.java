@@ -4,6 +4,7 @@ import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
 import me.symi.owndrop.gui.DropGUI;
 import me.symi.owndrop.utils.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -98,10 +99,35 @@ public class InventoryListeners implements Listener {
             }
 
             ItemStack item = event.getCurrentItem();
-            if(item.getItemMeta().getLore() != null && item.getItemMeta().getLore().size() >= 3)
+            final Player player = (Player) event.getWhoClicked();
+            final DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
+
+            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&aWlacz wszystko")))
             {
-                final Player player = (Player) event.getWhoClicked();
-                DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
+                for(ItemStack items : event.getClickedInventory().getContents())
+                {
+                    if(items != null && !items.getType().toString().contains("WOOL"))
+                    {
+                        dropSettings.removeDisabledDropItem(items);
+                    }
+                }
+                player.openInventory(DropGUI.getDropOptionsInventory(player));
+                player.playSound(player.getLocation(), Main.getInstance().getConfigManager().getDrop_sound(), 1.0f, 1.0f);
+            }
+            else if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&cWylacz wszystko")))
+            {
+                for(ItemStack items : event.getClickedInventory().getContents())
+                {
+                    if(items != null && !items.getType().toString().contains("WOOL"))
+                    {
+                        dropSettings.disableDropItem(items);
+                    }
+                }
+                player.openInventory(DropGUI.getDropOptionsInventory(player));
+                player.playSound(player.getLocation(), Main.getInstance().getConfigManager().getDrop_sound(), 1.0f, 1.0f);
+            }
+            else if(item.getItemMeta().getLore() != null && item.getItemMeta().getLore().size() >= 3)
+            {
                 if(item.getItemMeta().getLore().get(2).contains("§c"))
                 {
                     dropSettings.removeDisabledDropItem(item);

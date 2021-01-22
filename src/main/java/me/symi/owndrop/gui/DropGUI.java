@@ -15,13 +15,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class DropGUI {
 
     public static Inventory getDropOptionsInventory(Player player)
     {
         DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
-        Inventory inv = Bukkit.createInventory(null, 27, ChatUtil.fixColors("&e&lDrop &8» &4Opcje"));
+        Inventory inv = Bukkit.createInventory(null, Main.getInstance().getConfigManager().getDrop_settings_inventory_size(), ChatUtil.fixColors("&e&lDrop &8» &4Opcje"));
 
         int counter = 0;
 
@@ -29,16 +30,28 @@ public class DropGUI {
         for(DropItem dropItem : sorted_items)
         {
             double chance = dropItem.getChance();
-            String strChance = String.format("%.2f", chance);
-            ItemStack gui_item = new ItemStack(dropItem.getMaterial());
-            ItemMeta gui_item_meta = gui_item.getItemMeta();
-            gui_item_meta.setDisplayName(dropItem.getItemName());
+            double extra_chance = 1.0;
+            HashMap<String, Double> multipilers = Main.getInstance().getConfigManager().getMultipilers();
+            for(String permission : multipilers.keySet())
+            {
+                double multipiler = multipilers.get(permission);
+                if(player.hasPermission(permission) && extra_chance < multipiler)
+                {
+                    extra_chance = multipiler;
+                }
+            }
+
+            chance = chance * extra_chance;
 
             if(Main.getInstance().isTurbo_drop())
             {
                 chance = chance * 2;
-                strChance = String.format("%.2f", chance);
             }
+
+            String strChance = String.format("%.2f", chance);
+            ItemStack gui_item = new ItemStack(dropItem.getMaterial());
+            ItemMeta gui_item_meta = gui_item.getItemMeta();
+            gui_item_meta.setDisplayName(dropItem.getItemName());
 
             ItemStack item = dropItem.parseItem();
             ItemMeta itemMeta = item.getItemMeta();
@@ -60,6 +73,21 @@ public class DropGUI {
             inv.setItem(counter, gui_item);
             counter++;
         }
+
+        ItemStack enable_all = new ItemStack(Material.LIME_WOOL);
+        ItemMeta enable_all_meta = enable_all.getItemMeta();
+        enable_all_meta.setDisplayName(ChatUtil.fixColors("&aWlacz wszystko"));
+        enable_all_meta.setLore(ChatUtil.fixColors(Arrays.asList("&7Kliknij, aby &awlaczyc&7 wszystkie dropy")));
+        enable_all.setItemMeta(enable_all_meta);
+
+        ItemStack disable_all = new ItemStack(Material.RED_WOOL);
+        ItemMeta disable_all_meta = disable_all.getItemMeta();
+        disable_all_meta.setDisplayName(ChatUtil.fixColors("&cWylacz wszystko"));
+        disable_all_meta.setLore(ChatUtil.fixColors(Arrays.asList("&7Kliknij, aby &cwylaczyc&7 wszystkie dropy")));
+        disable_all.setItemMeta(disable_all_meta);
+
+        inv.setItem(inv.getSize() - 9, enable_all);
+        inv.setItem(inv.getSize() - 8, disable_all);
 
         return inv;
     }

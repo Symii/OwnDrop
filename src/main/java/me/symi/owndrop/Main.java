@@ -2,6 +2,7 @@ package me.symi.owndrop;
 
 import me.symi.owndrop.commands.DropCommand;
 import me.symi.owndrop.commands.TurboCommand;
+import me.symi.owndrop.database.SQLite;
 import me.symi.owndrop.listeners.BlockListeners;
 import me.symi.owndrop.listeners.InventoryListeners;
 import me.symi.owndrop.listeners.PlayerListeners;
@@ -21,6 +22,7 @@ public class Main extends JavaPlugin {
     private FileManager fileManager;
     private DropManager dropManager;
     private boolean turbo_drop;
+    private SQLite database;
 
     @Override
     public void onLoad()
@@ -43,6 +45,8 @@ public class Main extends JavaPlugin {
         fileManager = new FileManager(this);
         dropManager = new DropManager(this);
 
+        database = new SQLite(this);
+
         if(configManager.isMetrics())
         {
             new MetricsLite(this, 9926);
@@ -54,6 +58,8 @@ public class Main extends JavaPlugin {
     {
         if(playerDataManager != null)
             playerDataManager.onDisable();
+        if(database != null)
+            database.onDisable();
     }
 
     public PlayerDataManager getPlayerDataManager()
@@ -88,4 +94,10 @@ public class Main extends JavaPlugin {
     public void setTurbo_drop(boolean turbo_drop) {
         this.turbo_drop = turbo_drop;
     }
+
+    public SQLite getDatabase()
+    {
+        return database;
+    }
+
 }

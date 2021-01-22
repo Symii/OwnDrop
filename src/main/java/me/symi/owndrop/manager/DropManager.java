@@ -6,9 +6,11 @@ import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.RandomUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DropManager {
@@ -45,13 +47,27 @@ public class DropManager {
         }
     }
 
-    public List<DropItem> getDropItem()
+    public List<DropItem> getDropItem(Player player)
     {
         List<DropItem> drops = new ArrayList<>();
+        double extra_chance = 1.0;
+        HashMap<String, Double> multipilers = plugin.getConfigManager().getMultipilers();
+        for(String permission : multipilers.keySet())
+        {
+            double multipiler = multipilers.get(permission);
+            if(player.hasPermission(permission) && extra_chance < multipiler)
+            {
+                extra_chance = multipiler;
+            }
+        }
+
         for(DropItem dropItem : sorted_items)
         {
             double randomNum = RandomUtil.getRandomDouble(0, 100);
             double chance = dropItem.getChance();
+
+            chance = chance * extra_chance;
+
             if(Main.getInstance().isTurbo_drop())
             {
                 chance = chance * 2;

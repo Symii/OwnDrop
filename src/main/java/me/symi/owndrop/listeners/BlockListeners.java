@@ -65,12 +65,12 @@ public class BlockListeners implements Listener {
                 orb.setExperience(configManager.getExp_drop_amount());
             }
 
-            if(dropManager.getDropItem().size() <= 0)
+            if(dropManager.getDropItem(player).size() <= 0)
             {
                 return;
             }
 
-            for(DropItem dropItem : dropManager.getDropItem())
+            for(DropItem dropItem : dropManager.getDropItem(player))
             {
                 ItemStack item = dropItem.parseItem();
                 ItemMeta itemMeta = item.getItemMeta();

@@ -32,6 +32,10 @@ public class PlayerDataManager {
 
     public void onDisable()
     {
+        for(DropSettings settings : player_data.values())
+        {
+            settings.save();
+        }
         player_data.clear();
     }
 
