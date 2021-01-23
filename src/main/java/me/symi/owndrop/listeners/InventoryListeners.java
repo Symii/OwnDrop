@@ -3,8 +3,8 @@ package me.symi.owndrop.listeners;
 import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
 import me.symi.owndrop.gui.DropGUI;
+import me.symi.owndrop.manager.ConfigManager;
 import me.symi.owndrop.utils.ChatUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +22,7 @@ public class InventoryListeners implements Listener {
             return;
         }
 
-        if(event.getView().getTitle().equalsIgnoreCase(ChatUtil.fixColors("&e&lDrop &8» &4Menu")))
+        if(event.getView().getTitle().equalsIgnoreCase(Main.getInstance().getConfigManager().getDrop_menu_gui_title()))
         {
             event.setCancelled(true);
             if(!(event.getWhoClicked() instanceof Player))
@@ -37,16 +37,18 @@ public class InventoryListeners implements Listener {
             }
 
             final Player player = (Player) event.getWhoClicked();
-            if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Ustawienia &eDropu")))
+            ConfigManager manager = Main.getInstance().getConfigManager();
+
+            if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getDrop_settings_item().getItemMeta().getDisplayName()))
             {
                 player.openInventory(DropGUI.getDropSettingsInventory(player));
             }
-            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Opcje &eDropu")))
+            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getDrop_options_item().getItemMeta().getDisplayName()))
             {
                 player.openInventory(DropGUI.getDropOptionsInventory(player));
             }
         }
-        else if(event.getView().getTitle().equalsIgnoreCase(ChatUtil.fixColors("&e&lDrop &8» &4Ustawienia")))
+        else if(event.getView().getTitle().equalsIgnoreCase(Main.getInstance().getConfigManager().getDrop_settings_gui_title()))
         {
             event.setCancelled(true);
             if(!(event.getWhoClicked() instanceof Player))
@@ -62,29 +64,30 @@ public class InventoryListeners implements Listener {
 
             Player player = (Player) event.getWhoClicked();
             DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
+            ConfigManager manager = Main.getInstance().getConfigManager();
 
-            if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Drop Cobblestone")))
+            if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getCobblestone_drop_item().getItemMeta().getDisplayName()))
             {
                 dropSettings.setCobblestone_drop(!dropSettings.isCobblestone_drop());
                 player.openInventory(DropGUI.getDropSettingsInventory(player));
             }
-            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Drop EXPa")))
+            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getExp_drop_item().getItemMeta().getDisplayName()))
             {
                 dropSettings.setExp_drop(!dropSettings.isExp_drop());
                 player.openInventory(DropGUI.getDropSettingsInventory(player));
             }
-            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Wiadomosci")))
+            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getMessages_item().getItemMeta().getDisplayName()))
             {
                 dropSettings.setMessages(!dropSettings.isMessages());
                 player.openInventory(DropGUI.getDropSettingsInventory(player));
             }
-            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&7Dzwieki")))
+            else if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(manager.getSounds_item().getItemMeta().getDisplayName()))
             {
                 dropSettings.setSounds(!dropSettings.isSounds());
                 player.openInventory(DropGUI.getDropSettingsInventory(player));
             }
         }
-        else if(event.getView().getTitle().equalsIgnoreCase(ChatUtil.fixColors("&e&lDrop &8» &4Opcje")))
+        else if(event.getView().getTitle().equalsIgnoreCase(Main.getInstance().getConfigManager().getDrop_options_gui_title()))
         {
             event.setCancelled(true);
             if(!(event.getWhoClicked() instanceof Player))

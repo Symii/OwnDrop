@@ -15,3 +15,44 @@ enabled-worlds:
 drop-multipiler:
   - "owndrop.multipiler.vip;1.1"
   - "owndrop.multipiler.svip;1.2"
+
+drop-options-gui-title: "&e&lDrop &8» &4Opcje"
+drop-settings-gui-title: "&e&lDrop &8» &4Ustawienia"
+drop-menu-gui-title: "&e&lDrop &8» &4Menu"
+
+drop-menu-gui-fill-item-material: GRAY_STAINED_GLASS_PANE
+drop-settings-gui-fill-item-material: GRAY_STAINED_GLASS_PANE
+
+main-menu-gui-items:
+  drop-settings-item:
+    material: BEACON
+    name: "&7Ustawienia &eDropu"
+    lore:
+      - "&eKliknij, aby zobaczyc ustawienia dropu ze stone."
+  drop-options-item:
+    material: STONE_PICKAXE
+    name: "&7Opcje &eDropu"
+    lore:
+      - "&eKliknij, aby zobaczyc opcje dropu ze stone."
+
+drop-settings-gui-items:
+  exp-drop:
+    material: EXPERIENCE_BOTTLE
+    name: "&7Drop EXPa"
+    lore:
+      - "&7Status: %status%"
+  messages:
+    material: PAPER
+    name: "&7Wiadomosci"
+    lore:
+      - "&7Status: %status%"
+  sounds:
+    material: NOTE_BLOCK
+    name: "&7Dzwieki"
+    lore:
+      - "&7Status: %status%"
+  cobblestone-drop:
+    material: COBBLESTONE
+    name: "&7Drop Cobblestone"
+    lore:
+      - "&7Status: %status%"
