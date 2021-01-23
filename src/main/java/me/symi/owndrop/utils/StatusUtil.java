@@ -1,15 +1,17 @@
 package me.symi.owndrop.utils;
 
+import me.symi.owndrop.Main;
+
 public class StatusUtil {
 
     public static String getCheckMark()
     {
-        return "§a✔️";
+        return Main.getInstance().getConfigManager().getCheck_mark();
     }
 
     public static String getCrossMark()
     {
-        return "§cx️";
+        return Main.getInstance().getConfigManager().getCross_mark();
     }
 
 }

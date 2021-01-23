@@ -7,7 +7,6 @@ import me.symi.owndrop.owndrop.DropItem;
 import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.StatusUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,6 +24,7 @@ public class DropGUI {
     {
         DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
         Inventory inv = Bukkit.createInventory(null, Main.getInstance().getConfigManager().getDrop_settings_inventory_size(), Main.getInstance().getConfigManager().getDrop_options_gui_title());
+        ConfigManager manager = Main.getInstance().getConfigManager();
 
         int counter = 0;
 
@@ -60,11 +60,17 @@ public class DropGUI {
             itemMeta.setDisplayName(dropItem.getItemName());
             item.setItemMeta(itemMeta);
 
-            gui_item_meta.setLore(ChatUtil.fixColors(Arrays.asList(
-                    "&7Szansa: &e" + strChance + "%",
-                    "&7Ilosc: &ex" + dropItem.getAmount(),
-                    "&7Status: " + (dropSettings.isDropDisabled(item) ? StatusUtil.getCrossMark() : StatusUtil.getCheckMark())
-            )));
+            List<String> gui_item_lore = new ArrayList<>(Main.getInstance().getConfigManager().getDrop_item_lore());
+            for(int i = 0; i < gui_item_lore.size(); i++)
+            {
+                String text = gui_item_lore.get(i);
+                text = text.replaceFirst("%status%", (dropSettings.isDropDisabled(item) ? StatusUtil.getCrossMark() : StatusUtil.getCheckMark()));
+                text = text.replaceFirst("%amount%", String.valueOf(dropItem.getAmount()));
+                text = text.replaceFirst("%chance%", strChance);
+                gui_item_lore.set(i, text);
+            }
+
+            gui_item_meta.setLore(gui_item_lore);
             gui_item.setItemMeta(gui_item_meta);
 
             if(Main.getInstance().isTurbo_drop())
@@ -76,17 +82,8 @@ public class DropGUI {
             counter++;
         }
 
-        ItemStack enable_all = new ItemStack(Material.LIME_WOOL);
-        ItemMeta enable_all_meta = enable_all.getItemMeta();
-        enable_all_meta.setDisplayName(ChatUtil.fixColors("&aWlacz wszystko"));
-        enable_all_meta.setLore(ChatUtil.fixColors(Arrays.asList("&7Kliknij, aby &awlaczyc&7 wszystkie dropy")));
-        enable_all.setItemMeta(enable_all_meta);
-
-        ItemStack disable_all = new ItemStack(Material.RED_WOOL);
-        ItemMeta disable_all_meta = disable_all.getItemMeta();
-        disable_all_meta.setDisplayName(ChatUtil.fixColors("&cWylacz wszystko"));
-        disable_all_meta.setLore(ChatUtil.fixColors(Arrays.asList("&7Kliknij, aby &cwylaczyc&7 wszystkie dropy")));
-        disable_all.setItemMeta(disable_all_meta);
+        ItemStack enable_all = manager.getEnable_all_item();
+        ItemStack disable_all = manager.getDisable_all_item();
 
         inv.setItem(inv.getSize() - 9, enable_all);
         inv.setItem(inv.getSize() - 8, disable_all);
@@ -174,12 +171,15 @@ public class DropGUI {
         ItemStack drop = manager.getDrop_options_item();
         ItemStack settings = manager.getDrop_settings_item();
 
-        ItemStack turbo = new ItemStack(Material.DIAMOND_PICKAXE);
+        ItemStack turbo = manager.getTurbo_drop_item().clone();
         ItemMeta turbo_meta = turbo.getItemMeta();
-        turbo_meta.setDisplayName(ChatUtil.fixColors("&7Turbo &cDrop"));
-        turbo_meta.setLore(ChatUtil.fixColors(Arrays.asList(
-                "&7Status: " + (Main.getInstance().isTurbo_drop() ? StatusUtil.getCheckMark() : StatusUtil.getCrossMark())
-        )));
+        List<String> turbo_lore = new ArrayList<>(turbo_meta.getLore());
+        for(int i = 0; i < turbo_lore.size(); i++)
+        {
+            turbo_lore.set(i, turbo_lore.get(i).replace("%status%",
+                    (Main.getInstance().isTurbo_drop() ? StatusUtil.getCheckMark() : StatusUtil.getCrossMark())));
+        }
+        turbo_meta.setLore(turbo_lore);
         turbo.setItemMeta(turbo_meta);
 
         inv.setItem(11, drop);

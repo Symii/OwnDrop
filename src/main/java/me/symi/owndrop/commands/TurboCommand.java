@@ -35,7 +35,11 @@ public class TurboCommand implements CommandExecutor {
                     return true;
                 }
                 sender.sendMessage(ChatUtil.fixColors("&eDrop &8► &auruchomiles turbo drop na &e" + minutes + " minut"));
-                Bukkit.broadcastMessage(ChatUtil.fixColors("&cTurbo Drop &7został uruchomiony przez &e" + sender.getName() + " &7na &e" + minutes + " minut!"));
+                String broadcast = Main.getInstance().getConfigManager().getTurbo_drop_message()
+                        .replace("%player%", sender.getName())
+                        .replace("%minutes%", String.valueOf(minutes));
+
+                Bukkit.broadcastMessage(broadcast);
                 Main.getInstance().setTurbo_drop(true);
                 new BukkitRunnable()
                 {

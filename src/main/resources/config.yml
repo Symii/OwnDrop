@@ -6,6 +6,7 @@ drop-settings-inventory-size: 36
 
 drop-sound: BLOCK_DISPENSER_DISPENSE
 drop-message: "&eDrop &8► &7wydropiłeś/aś &d%item% &fx&7%amount%"
+turbo-drop-message: "&cTurbo Drop &7został uruchomiony przez &e%player% &7na &e%minutes% minut!"
 
 enabled-worlds:
   - "world"
@@ -20,8 +21,16 @@ drop-options-gui-title: "&e&lDrop &8» &4Opcje"
 drop-settings-gui-title: "&e&lDrop &8» &4Ustawienia"
 drop-menu-gui-title: "&e&lDrop &8» &4Menu"
 
-drop-menu-gui-fill-item-material: GRAY_STAINED_GLASS_PANE
-drop-settings-gui-fill-item-material: GRAY_STAINED_GLASS_PANE
+drop-menu-gui-fill-item-material: BLUE_STAINED_GLASS_PANE
+drop-settings-gui-fill-item-material: BLUE_STAINED_GLASS_PANE
+
+check-mark: "&a✔"
+cross-mark: "&4x"
+
+drop-item-lore:
+  - "&7Szansa: &e%chance%%"
+  - "&7Ilosc: &ex%amount%"
+  - "&7Status: %status%"
 
 main-menu-gui-items:
   drop-settings-item:
@@ -34,6 +43,11 @@ main-menu-gui-items:
     name: "&7Opcje &eDropu"
     lore:
       - "&eKliknij, aby zobaczyc opcje dropu ze stone."
+  turbo-drop-item:
+    material: DIAMOND_PICKAXE
+    name: "&7Turbo &cDrop"
+    lore:
+      - "&7Status: %status%"
 
 drop-settings-gui-items:
   exp-drop:
@@ -56,3 +70,15 @@ drop-settings-gui-items:
     name: "&7Drop Cobblestone"
     lore:
       - "&7Status: %status%"
+
+drop-options-gui-items:
+  enable-all:
+    material: LIME_WOOL
+    name: "&aWlacz wszystko"
+    lore:
+      - "&7Kliknij, aby &awlaczyc&7 wszystkie dropy"
+  disable-all:
+    material: RED_WOOL
+    name: "&cWylacz wszystko"
+    lore:
+      - "&7Kliknij, aby &cwylaczyc&7 wszystkie dropy"

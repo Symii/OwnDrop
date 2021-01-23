@@ -4,7 +4,6 @@ import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
 import me.symi.owndrop.gui.DropGUI;
 import me.symi.owndrop.manager.ConfigManager;
-import me.symi.owndrop.utils.ChatUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -104,8 +103,9 @@ public class InventoryListeners implements Listener {
             ItemStack item = event.getCurrentItem();
             final Player player = (Player) event.getWhoClicked();
             final DropSettings dropSettings = Main.getInstance().getPlayerDataManager().getDropSettings(player);
+            final ConfigManager manager = Main.getInstance().getConfigManager();
 
-            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&aWlacz wszystko")))
+            if(item.getItemMeta().getDisplayName().equalsIgnoreCase(manager.getEnable_all_item().getItemMeta().getDisplayName()))
             {
                 for(ItemStack items : event.getClickedInventory().getContents())
                 {
@@ -117,7 +117,7 @@ public class InventoryListeners implements Listener {
                 player.openInventory(DropGUI.getDropOptionsInventory(player));
                 player.playSound(player.getLocation(), Main.getInstance().getConfigManager().getDrop_sound(), 1.0f, 1.0f);
             }
-            else if(item.getItemMeta().getDisplayName().equalsIgnoreCase(ChatUtil.fixColors("&cWylacz wszystko")))
+            else if(item.getItemMeta().getDisplayName().equalsIgnoreCase(manager.getDisable_all_item().getItemMeta().getDisplayName()))
             {
                 for(ItemStack items : event.getClickedInventory().getContents())
                 {
@@ -131,13 +131,24 @@ public class InventoryListeners implements Listener {
             }
             else if(item.getItemMeta().getLore() != null && item.getItemMeta().getLore().size() >= 3)
             {
-                if(item.getItemMeta().getLore().get(2).contains("§c"))
+                boolean is_enabled = true;
+                String cross_mark = Main.getInstance().getConfigManager().getCross_mark();
+                for(String text : item.getItemMeta().getLore())
                 {
-                    dropSettings.removeDisabledDropItem(item);
+                    if(text.contains(cross_mark))
+                    {
+                        is_enabled = false;
+                        break;
+                    }
                 }
-                else if(item.getItemMeta().getLore().get(2).contains("§a"))
+
+                if(is_enabled)
                 {
                     dropSettings.disableDropItem(item);
+                }
+                else
+                {
+                    dropSettings.removeDisabledDropItem(item);
                 }
                 player.openInventory(DropGUI.getDropOptionsInventory(player));
             }

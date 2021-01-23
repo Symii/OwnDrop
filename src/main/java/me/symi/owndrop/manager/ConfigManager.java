@@ -18,16 +18,19 @@ public class ConfigManager {
     private boolean metrics;
     private double exp_drop_chance;
     private int exp_drop_amount;
-    private String drop_message;
+    private String drop_message, turbo_drop_message;
     private List<String> enabled_worlds;
     private HashMap<String, Double> multipilers = new HashMap<>();
     private int drop_settings_inventory_size;
     private String drop_options_gui_title, drop_settings_gui_title, drop_menu_gui_title;
 
-    private ItemStack drop_settings_item, drop_options_item;
+    private ItemStack drop_settings_item, drop_options_item, turbo_drop_item;
     private Material drop_menu_gui_fill_item_material, drop_settings_gui_fill_item_material;
 
     private ItemStack exp_drop_item, messages_item, sounds_item, cobblestone_drop_item;
+    private ItemStack enable_all_item, disable_all_item;
+    private List<String> drop_item_lore;
+    private String cross_mark, check_mark;
 
     public ConfigManager(Main plugin)
     {
@@ -57,6 +60,24 @@ public class ConfigManager {
         drop_options_gui_title = ChatUtil.fixColors(config.getString("drop-options-gui-title"));
         drop_settings_gui_title = ChatUtil.fixColors(config.getString("drop-settings-gui-title"));
         drop_menu_gui_title = ChatUtil.fixColors(config.getString("drop-menu-gui-title"));
+
+        disable_all_item = new ItemStack(Material.valueOf(config.getString("drop-options-gui-items.disable-all.material").toUpperCase()));
+        ItemMeta disable_all_item_meta = disable_all_item.getItemMeta();
+        disable_all_item_meta.setDisplayName(ChatUtil.fixColors(config.getString("drop-options-gui-items.disable-all.name")));
+        disable_all_item_meta.setLore(ChatUtil.fixColors(config.getStringList("drop-options-gui-items.disable-all.lore")));
+        disable_all_item.setItemMeta(disable_all_item_meta);
+
+        enable_all_item = new ItemStack(Material.valueOf(config.getString("drop-options-gui-items.enable-all.material").toUpperCase()));
+        ItemMeta enable_all_item_meta = enable_all_item.getItemMeta();
+        enable_all_item_meta.setDisplayName(ChatUtil.fixColors(config.getString("drop-options-gui-items.enable-all.name")));
+        enable_all_item_meta.setLore(ChatUtil.fixColors(config.getStringList("drop-options-gui-items.enable-all.lore")));
+        enable_all_item.setItemMeta(enable_all_item_meta);
+
+        turbo_drop_item = new ItemStack(Material.valueOf(config.getString("main-menu-gui-items.turbo-drop-item.material").toUpperCase()));
+        ItemMeta turbo_drop_item_meta = turbo_drop_item.getItemMeta();
+        turbo_drop_item_meta.setDisplayName(ChatUtil.fixColors(config.getString("main-menu-gui-items.turbo-drop-item.name")));
+        turbo_drop_item_meta.setLore(ChatUtil.fixColors(config.getStringList("main-menu-gui-items.turbo-drop-item.lore")));
+        turbo_drop_item.setItemMeta(turbo_drop_item_meta);
 
         drop_settings_item = new ItemStack(Material.valueOf(config.getString("main-menu-gui-items.drop-settings-item.material").toUpperCase()));
         ItemMeta drop_settings_item_meta = drop_settings_item.getItemMeta();
@@ -96,6 +117,40 @@ public class ConfigManager {
         exp_drop_item_meta.setDisplayName(ChatUtil.fixColors(config.getString("drop-settings-gui-items.exp-drop.name")));
         exp_drop_item_meta.setLore(ChatUtil.fixColors(config.getStringList("drop-settings-gui-items.exp-drop.lore")));
         exp_drop_item.setItemMeta(exp_drop_item_meta);
+
+        turbo_drop_message = ChatUtil.fixColors(config.getString("turbo-drop-message"));
+        drop_item_lore = ChatUtil.fixColors(config.getStringList("drop-item-lore"));
+
+        cross_mark = ChatUtil.fixColors(config.getString("cross-mark"));
+        check_mark = ChatUtil.fixColors(config.getString("check-mark"));
+    }
+
+    public String getCross_mark() {
+        return cross_mark;
+    }
+
+    public String getCheck_mark() {
+        return check_mark;
+    }
+
+    public List<String> getDrop_item_lore() {
+        return drop_item_lore;
+    }
+
+    public ItemStack getEnable_all_item() {
+        return enable_all_item;
+    }
+
+    public ItemStack getDisable_all_item() {
+        return disable_all_item;
+    }
+
+    public ItemStack getTurbo_drop_item() {
+        return turbo_drop_item;
+    }
+
+    public String getTurbo_drop_message() {
+        return turbo_drop_message;
     }
 
     public ItemStack getExp_drop_item() {
