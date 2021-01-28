@@ -4,7 +4,6 @@ import me.symi.owndrop.Main;
 import me.symi.owndrop.drop.DropSettings;
 import me.symi.owndrop.manager.ConfigManager;
 import me.symi.owndrop.owndrop.DropItem;
-import me.symi.owndrop.utils.ChatUtil;
 import me.symi.owndrop.utils.StatusUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
@@ -14,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,23 +48,38 @@ public class DropGUI {
                 chance = chance * 2;
             }
 
-            String strChance = String.format("%.2f", chance);
+            String strChance = "";
+            if(chance >= 0.01)
+            {
+                strChance = String.format("%.2f", chance);
+            }
+            else
+            {
+                strChance = String.format("%.3f", chance);
+            }
+
             ItemStack gui_item = new ItemStack(dropItem.getMaterial());
             ItemMeta gui_item_meta = gui_item.getItemMeta();
             gui_item_meta.setDisplayName(dropItem.getItemName());
 
-            ItemStack item = dropItem.parseItem();
+            ItemStack item = dropItem.parseItem(player);
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setDisplayName(dropItem.getItemName());
             item.setItemMeta(itemMeta);
+            item.setAmount(1);
 
             List<String> gui_item_lore = new ArrayList<>(Main.getInstance().getConfigManager().getDrop_item_lore());
             for(int i = 0; i < gui_item_lore.size(); i++)
             {
                 String text = gui_item_lore.get(i);
                 text = text.replaceFirst("%status%", (dropSettings.isDropDisabled(item) ? StatusUtil.getCrossMark() : StatusUtil.getCheckMark()));
-                text = text.replaceFirst("%amount%", String.valueOf(dropItem.getAmount()));
                 text = text.replaceFirst("%chance%", strChance);
+
+                text = text.replaceFirst("%fortune0%", dropItem.getFortune0min() + "-" + dropItem.getFortune0max());
+                text = text.replaceFirst("%fortune1%", dropItem.getFortune1min() + "-" + dropItem.getFortune1max());
+                text = text.replaceFirst("%fortune2%", dropItem.getFortune2min() + "-" + dropItem.getFortune2max());
+                text = text.replaceFirst("%fortune3%", dropItem.getFortune3min() + "-" + dropItem.getFortune3max());
+
                 gui_item_lore.set(i, text);
             }
 

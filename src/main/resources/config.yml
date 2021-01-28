@@ -29,8 +29,12 @@ cross-mark: "&4x"
 
 drop-item-lore:
   - "&7Szansa: &e%chance%%"
-  - "&7Ilosc: &ex%amount%"
   - "&7Status: %status%"
+  - "&eIlosc:"
+  - "&7Fortune 0: %fortune0%"
+  - "&7Fortune 1: %fortune1%"
+  - "&7Fortune 2: %fortune2%"
+  - "&7Fortune 3: %fortune3%"
 
 main-menu-gui-items:
   drop-settings-item:

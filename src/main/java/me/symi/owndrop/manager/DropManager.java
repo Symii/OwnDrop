@@ -33,7 +33,6 @@ public class DropManager {
             double chance = config.getDouble("drop." + s + ".chance");
             boolean custom_name_enabled = config.getBoolean("drop." + s + ".custom-name-enabled");
             Material material = Material.valueOf(config.getString("drop." + s + ".material").toUpperCase());
-            int amount = config.getInt("drop." + s + ".amount");
             List<String> lore = new ArrayList<>();
             String itemName = ChatUtil.fixColors(config.getString("drop." + s + ".name"));
 
@@ -42,7 +41,12 @@ public class DropManager {
                 lore = ChatUtil.fixColors(config.getStringList("drop." + s + ".lore"));
             }
 
-            DropItem dropItem = new DropItem(lore, custom_name_enabled, chance, amount, material, itemName);
+            String fortune0 = config.getString("drop." + s + ".amount.fortune0");
+            String fortune1 = config.getString("drop." + s + ".amount.fortune1");
+            String fortune2 = config.getString("drop." + s + ".amount.fortune2");
+            String fortune3 = config.getString("drop." + s + ".amount.fortune3");
+
+            DropItem dropItem = new DropItem(lore, custom_name_enabled, chance, material, itemName, fortune0, fortune1, fortune2, fortune3);
             sorted_items.add(dropItem);
         }
     }

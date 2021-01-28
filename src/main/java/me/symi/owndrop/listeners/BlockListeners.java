@@ -72,7 +72,7 @@ public class BlockListeners implements Listener {
 
             for(DropItem dropItem : dropManager.getDropItem(player))
             {
-                ItemStack item = dropItem.parseItem();
+                ItemStack item = dropItem.parseItem(player);
                 ItemMeta itemMeta = item.getItemMeta();
                 itemMeta.setDisplayName(dropItem.getItemName());
                 item.setItemMeta(itemMeta);
@@ -81,18 +81,19 @@ public class BlockListeners implements Listener {
                 {
                     continue;
                 }
-                if(dropSettings.isMessages())
-                {
-                    player.sendMessage(configManager.getDrop_message()
-                            .replace("%item%", dropItem.getItemName())
-                            .replace("%amount%", String.valueOf(dropItem.getAmount())));
-                }
 
-                ItemStack drop_item = dropItem.parseItem();
+                ItemStack drop_item = dropItem.parseItem(player);
+                drop_item.setAmount(item.getAmount());
                 DropToInvUtil.dropItem(player, drop_item, block_location);
                 if(dropSettings.isSounds())
                 {
                     player.playSound(player.getLocation(), configManager.getDrop_sound(), 1.0f, 1.0f);
+                }
+                if(dropSettings.isMessages())
+                {
+                    player.sendMessage(configManager.getDrop_message()
+                            .replace("%item%", dropItem.getItemName())
+                            .replace("%amount%", String.valueOf(drop_item.getAmount())));
                 }
             }
         }

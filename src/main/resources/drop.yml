@@ -2,43 +2,71 @@ drop:
   1:
     material: DIAMOND
     chance: 1.2
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&bDiament"
     custom-name-enabled: false
   2:
     material: GOLD_INGOT
     chance: 1.43
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&eZloto"
     custom-name-enabled: false
   3:
     material: IRON_ORE
     chance: 1.56
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&7Zelazo"
     custom-name-enabled: false
   4:
     material: OBSIDIAN
     chance: 1.87
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&3Obsydian"
     custom-name-enabled: false
   5:
     material: acacia_log
     chance: 2.01
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&6Drewno akacjowe"
     custom-name-enabled: false
   6:
     material: COAL
     chance: 2.15
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&8Wegiel"
     custom-name-enabled: false
   7:
     material: TRIPWIRE_HOOK
     chance: 1.35
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&dKlucz do normal_case skrzynki"
     lore:
       - "&6Otworzysz tym &enormal_case &6skrzynke"
@@ -46,7 +74,11 @@ drop:
   8:
     material: TRIPWIRE_HOOK
     chance: 0.75
-    amount: 1
+    amount:
+      fortune0: "1-1"
+      fortune1: "1-2"
+      fortune2: "2-3"
+      fortune3: "3-4"
     name: "&dKlucz do legendarna skrzynki"
     lore:
       - "&6Otworzysz tym &elegendarna &6skrzynke"
